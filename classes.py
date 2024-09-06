@@ -1,6 +1,7 @@
 import tkinter as tk
 
 
+
 class MinatoAquaMaidApp:
     def __init__(self, pMainWindow: tk.Tk):
         self.aMainWindow = pMainWindow
@@ -16,8 +17,9 @@ class MinatoAquaMaidApp:
         self.aScreenHeight = self.aMainWindow.winfo_screenheight()
 
         # main window image dimensions
-        self.aMainWindow.aImageWidth=256
-        self.aMainWindow.aImageHeight=256
+        self.aMainWindow.aImage=tk.PhotoImage(file='minato-aqua-excited256.png')
+        self.aMainWindow.aImageWidth=self.aMainWindow.aImage.width()
+        self.aMainWindow.aImageHeight=self.aMainWindow.aImage.height()
 
         # main window settings
         self.aMainWindow.aPosX=self.aScreenWidth - self.aMainWindow.aImageWidth
@@ -27,7 +29,6 @@ class MinatoAquaMaidApp:
         self.aMainWindow.overrideredirect(True)
 
         #populating main window
-        self.aMainWindow.aImage=tk.PhotoImage(file='main-window-image256.png')
         self.aMainWindow.aFrame = tk.Frame(self.aMainWindow)
         self.aMainWindow.aFrame.grid()  # using grid
 
@@ -89,6 +90,7 @@ class MinatoAquaMaidApp:
         print("Showing to-do list...")
         self.addToDoListItem("omae, yowai, atishi, tsuyoi")
         self.addToDoListItem("atishi")
+
     
 
 
