@@ -1,95 +1,119 @@
-import tkinter as tk
+from tkinter import *
+import random
+import pygame
+import threading
+import os
 
 
 
 class MinatoAquaMaidApp:
-    def __init__(self, pMainWindow: tk.Tk):
-        self.aMainWindow = pMainWindow
-        self.aMainWindow.aToDoListWindow = tk.Toplevel(self.aMainWindow)
+    def __init__(self, pMainWindow: Tk):
+        self.MainWindow = pMainWindow
+        self.screenWidth = self.MainWindow.winfo_screenwidth()
+        self.screenHeight = self.MainWindow.winfo_screenheight()
+        pygame.mixer.init()
+        self.soundsNameList = [file for file in os.listdir("sounds") if file.endswith(".mp3")] # store the name of all mp3 files in "sounds" folder
 
-        self.initApp()
+        self.initMainWindow()
 
-    def initApp(self):
+    def initMainWindow(self):
         print("Starting Minato Aqua Maid...")
-        
-        # screen dimensions
-        self.aScreenWidth = self.aMainWindow.winfo_screenwidth()
-        self.aScreenHeight = self.aMainWindow.winfo_screenheight()
 
-        # main window image dimensions
-        self.aMainWindow.aImage=tk.PhotoImage(file='minato-aqua-excited256.png')
-        self.aMainWindow.aImageWidth=self.aMainWindow.aImage.width()
-        self.aMainWindow.aImageHeight=self.aMainWindow.aImage.height()
+        # main window
+        self.MainWindow.BackgroundImage = PhotoImage(file="img/minato-aqua-excited256.png") # main window background label image
+        self.MainWindow.BackgroundLabel = Label(master=self.MainWindow, image=self.MainWindow.BackgroundImage) # main window background label
+        self.MainWindow.BackgroundLabel.bind("<Enter>", lambda event: self.MainWindow.BackgroundLabel.config(cursor="hand2"))
+        self.MainWindow.BackgroundLabel.bind("<Button-1>", lambda event: self.prepareToPlaySound())
+
+        self.MainWindow.BackgroundLabel.pack()
 
         # main window settings
-        self.aMainWindow.aPosX=self.aScreenWidth - self.aMainWindow.aImageWidth
-        self.aMainWindow.aPosY=((2 * self.aScreenHeight) // 3)  - self.aMainWindow.aImageHeight
+        self.MainWindow.title("Minato Aqua Maid") # window title bar text
+        self.MainWindow.resizable(False, False) # window size can't be changed
+        self.MainWindow.overrideredirect(True) # delete window borders
 
-        self.aMainWindow.geometry(f"{self.aMainWindow.aImageWidth}x{self.aMainWindow.aImageHeight}+{self.aMainWindow.aPosX}+{self.aMainWindow.aPosY}")
-        self.aMainWindow.overrideredirect(True)
+        self.MainWindow.width=self.MainWindow.BackgroundImage.width()
+        self.MainWindow.height=self.MainWindow.BackgroundImage.height()
 
-        #populating main window
-        self.aMainWindow.aFrame = tk.Frame(self.aMainWindow)
-        self.aMainWindow.aFrame.grid()  # using grid
+        self.MainWindow.posX=(self.screenWidth)-(self.MainWindow.width)
+        self.MainWindow.posY=((2 * self.screenHeight)//3)-(self.MainWindow.height)
 
-        self.aMainWindow.ExitButton = tk.Button(self.aMainWindow.aFrame, image=self.aMainWindow.aImage, command=self.exitApp).grid(column=0, row=0)
+        self.MainWindow.geometry(f"{self.MainWindow.width}x{self.MainWindow.height}+{self.MainWindow.posX}+{self.MainWindow.posY}")
 
-        self.aToDoListWindowShowButton = tk.Button(self.aMainWindow.aFrame, command=self.showToDoListWindow).grid(column=0, row=0)
 
-        self.initToDoListWindow()
+
+
+        # app control frame settings
+        self.MainWindow.AppControlFrame = Frame(master=self.MainWindow)
+
+        # exit button
+        self.MainWindow.ExitButtonImage = PhotoImage(file="img/minato-aqua-greeting64.png") # exit button image
+        self.MainWindow.ExitButton = Button(master=self.MainWindow.AppControlFrame, image=self.MainWindow.ExitButtonImage, command=self.exitApp,
+                                             bd=0, cursor="hand2") # exit button
+        
+        # exit button settings
+        self.MainWindow.ExitButton.width=self.MainWindow.ExitButtonImage.width()
+        self.MainWindow.ExitButton.height=self.MainWindow.ExitButtonImage.height()
+
+        self.MainWindow.ExitButton.pack()
+        
+
+
+        # main menu frame settings
+        self.MainWindow.MainMenuFrame = Frame(master=self.MainWindow)
+
+        # to do list button
+        self.MainWindow.ToDoListButtonImage = PhotoImage(file="img/minato-aqua-crying64.png") # to do list window button image
+        self.MainWindow.ToDoListButton = Button(master=self.MainWindow.MainMenuFrame, image=self.MainWindow.ToDoListButtonImage, command=self.showToDoListWindow,
+                                                  bd=0, cursor="hand2") # to do list button
+        
+        # to do list button settings
+        self.MainWindow.ToDoListButton.width=self.MainWindow.ToDoListButtonImage.width()
+        self.MainWindow.ToDoListButton.height=self.MainWindow.ToDoListButtonImage.height()
+
+        self.MainWindow.ToDoListButton.pack()
+
+
+
+
+        # adding frames
+        self.MainWindow.MainMenuFrame.posX=0
+        self.MainWindow.MainMenuFrame.posY=0
+        self.MainWindow.MainMenuFrame.place(x=self.MainWindow.MainMenuFrame.posX, y=self.MainWindow.MainMenuFrame.posY)
+
+
+        self.MainWindow.AppControlFrame.posX=(self.MainWindow.width) - (self.MainWindow.ExitButton.width)
+        self.MainWindow.AppControlFrame.posY=0
+        self.MainWindow.AppControlFrame.place(x=self.MainWindow.AppControlFrame.posX, y=self.MainWindow.AppControlFrame.posY)
+
+
 
     def runApp(self):
         # after is to execute after the mainloop started, 0 is the time to wait before executing (in ms)
-        self.aMainWindow.after(0, lambda: print("Minato Aqua Maid started."))
-        self.aMainWindow.mainloop()
+        self.MainWindow.after(0, lambda: print("Minato Aqua Maid started."))
+        self.MainWindow.mainloop()
     
     def exitApp(self):
         print("Exiting Minato Aqua Maid...")
-        self.aMainWindow.destroy()
+        self.MainWindow.destroy()
         print("Minato Aqua Maid exited.")
 
+    def prepareToPlaySound(self):
+        threading.Thread(target=self.playRandomSound()).start()
+
+    def playRandomSound(self):
+        print("Playing random sound...")
+
+        randomNumber = random.randint(0, 4) # choose random number from 0 to 4
+        print(f"Playing sound: {self.soundsNameList[randomNumber]} ({randomNumber})")
+        # play random sound
+        pygame.mixer.music.load(f'sounds/{self.soundsNameList[randomNumber]}')
+        pygame.mixer.music.play()
+
+
     def showToDoListWindow(self):
-        print("Showing to-do list...")
-        self.aMainWindow.aToDoListWindow.deiconify()
-        self.showToDoList()
-    
-    def hideToDoListWindow(self):
-        print("Hiding to-do list...")
-        self.aMainWindow.aToDoListWindow.withdraw()
-    
-    def initToDoListWindow(self):
-        # to do list window image dimensions
-        self.aMainWindow.aToDoListWindow.aWidth=256
-        self.aMainWindow.aToDoListWindow.aHeight=384
+        print("Showing to-do list window...")
 
-        # to do list window settings
-        self.aMainWindow.aToDoListWindow.aPosX=self.aMainWindow.aPosX - self.aMainWindow.aToDoListWindow.aWidth
-        self.aMainWindow.aToDoListWindow.aPosY=self.aMainWindow.aPosY - self.aMainWindow.aToDoListWindow.aHeight
-
-        # populating to do list window
-        self.aMainWindow.aToDoListWindow.aFrame = tk.Frame(self.aMainWindow.aToDoListWindow)
-        self.aMainWindow.aToDoListWindow.aFrame.grid()  # using grid
-
-        self.aMainWindow.aToDoListWindow.geometry(f"{self.aMainWindow.aToDoListWindow.aWidth}x{self.aMainWindow.aToDoListWindow.aHeight}+{self.aMainWindow.aToDoListWindow.aPosX}+{self.aMainWindow.aToDoListWindow.aPosY}")
-        self.aMainWindow.aToDoListWindow.overrideredirect(True)
-
-        self.aMainWindow.aToDoListWindow.aHideButton = tk.Button(self.aMainWindow.aToDoListWindow.aFrame,
-                                                                 command=self.hideToDoListWindow).grid(column=1, row=0)
-
-        # creating to do list
-        self.aMainWindow.aToDoListWindow.aToDoList = list()
-
-        self.hideToDoListWindow()
-
-    def addToDoListItem(self, pToDoItem: str):
-        print(f"Adding '{pToDoItem}' to to-do list.")
-        self.aMainWindow.aToDoListWindow.aToDoList.append(pToDoItem)
-        print(f"'{pToDoItem}' added to to-do list.")
-        
-    def showToDoList(self):
-        print("Showing to-do list...")
-        self.addToDoListItem("omae, yowai, atishi, tsuyoi")
-        self.addToDoListItem("atishi")
 
     
 

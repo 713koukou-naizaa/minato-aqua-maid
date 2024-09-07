@@ -6,7 +6,7 @@ from classes import *
 
 
 def main():
-    MainWindow = tk.Tk()
+    MainWindow = Tk()
     App = MinatoAquaMaidApp(MainWindow)
 
 
