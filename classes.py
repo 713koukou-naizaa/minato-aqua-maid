@@ -109,6 +109,7 @@ class MinatoAquaMaidApp:
         # play random sound
         pygame.mixer.music.load(f'sounds/{self.soundsNameList[randomNumber]}')
         pygame.mixer.music.play()
+        pygame.mixer.music.set_volume(0.15)
 
 
     def showToDoListWindow(self):
