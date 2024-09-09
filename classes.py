@@ -32,6 +32,7 @@ class MinatoAquaMaidApp:
         self.MainWindow.title("Minato Aqua Maid") # window title bar text
         self.MainWindow.resizable(False, False) # window size can't be changed
         self.MainWindow.overrideredirect(True) # delete window borders
+        self.MainWindow.configure(bg="#acdfe6")
 
         self.MainWindow.width=self.MainWindow.BackgroundImage.width()
         self.MainWindow.height=self.MainWindow.BackgroundImage.height()
@@ -142,6 +143,7 @@ class MinatoAquaMaidApp:
         # to do list item query window settings
         self.MainWindow.AddToDoListItemWindow.title("Add new to-do list item")
         self.MainWindow.AddToDoListItemWindow.resizable(False, False)
+        self.MainWindow.AddToDoListItemWindow.configure(bg="#e3bcd5")
 
         self.MainWindow.AddToDoListItemWindow.width=300
         self.MainWindow.AddToDoListItemWindow.height=100
@@ -155,20 +157,24 @@ class MinatoAquaMaidApp:
         self.MainWindow.AddToDoListItemWindow.AddFrame = Frame(master=self.MainWindow.AddToDoListItemWindow)
         
         # title label
-        self.MainWindow.AddToDoListItemWindow.TitleLabel = Label(master=self.MainWindow.AddToDoListItemWindow.AddFrame, text="Add new to-do list item")
+        self.MainWindow.AddToDoListItemWindow.TitleLabel = Label(master=self.MainWindow.AddToDoListItemWindow.AddFrame, text="Add new to-do list item",
+                                                                 bd=0, bg="#e3bcd5")
         self.MainWindow.AddToDoListItemWindow.TitleLabel.pack()
 
         # item entry
-        self.MainWindow.AddToDoListItemWindow.AddEntry = Entry(master=self.MainWindow.AddToDoListItemWindow.AddFrame)
+        self.MainWindow.AddToDoListItemWindow.AddEntry = Entry(master=self.MainWindow.AddToDoListItemWindow.AddFrame,
+                                                                 bd=0, bg="#f7d5eb")
         self.MainWindow.AddToDoListItemWindow.AddEntry.pack()
         self.MainWindow.AddToDoListItemWindow.AddEntry.focus_set()
 
         # add button
         self.MainWindow.AddToDoListItemWindow.AddButton = Button(master=self.MainWindow.AddToDoListItemWindow.AddFrame,
-                                                                 text="Add", command=lambda:self.addToDoListItem(self.MainWindow.AddToDoListItemWindow.AddEntry.get()))
+                                                                 text="Add", command=lambda:self.addToDoListItem(self.MainWindow.AddToDoListItemWindow.AddEntry.get()),
+                                                                 bd=0, bg="#dba4c8", activebackground="#dba4c8")
         self.MainWindow.AddToDoListItemWindow.AddButton.pack()
 
 
+        self.MainWindow.AddToDoListItemWindow.AddFrame.configure(bg="#e3bcd5")
         self.MainWindow.AddToDoListItemWindow.AddFrame.pack()
 
     def showToDoList(self):
@@ -190,6 +196,7 @@ class MinatoAquaMaidApp:
         # to do list item query window settings
         self.MainWindow.DeleteToDoListItemWindow.title("Delete to-do list item")
         self.MainWindow.DeleteToDoListItemWindow.resizable(False, False)
+        self.MainWindow.DeleteToDoListItemWindow.configure(bg="#e3bcd5")
 
         self.MainWindow.DeleteToDoListItemWindow.width=300
         self.MainWindow.DeleteToDoListItemWindow.height=100
@@ -203,20 +210,24 @@ class MinatoAquaMaidApp:
         self.MainWindow.DeleteToDoListItemWindow.DeleteFrame = Frame(master=self.MainWindow.DeleteToDoListItemWindow)
         
         # title label
-        self.MainWindow.DeleteToDoListItemWindow.TitleLabel = Label(master=self.MainWindow.DeleteToDoListItemWindow.DeleteFrame, text="Delete to-do list item")
+        self.MainWindow.DeleteToDoListItemWindow.TitleLabel = Label(master=self.MainWindow.DeleteToDoListItemWindow.DeleteFrame, text="Delete to-do list item",
+                                                                 bd=0, bg="#e3bcd5")
         self.MainWindow.DeleteToDoListItemWindow.TitleLabel.pack()
 
         # item number entry
-        self.MainWindow.DeleteToDoListItemWindow.DeleteEntry = Entry(master=self.MainWindow.DeleteToDoListItemWindow.DeleteFrame)
+        self.MainWindow.DeleteToDoListItemWindow.DeleteEntry = Entry(master=self.MainWindow.DeleteToDoListItemWindow.DeleteFrame,
+                                                                 bd=0, bg="#f7d5eb")
         self.MainWindow.DeleteToDoListItemWindow.DeleteEntry.pack()
         self.MainWindow.DeleteToDoListItemWindow.DeleteEntry.focus_set()
 
         # delete button
         self.MainWindow.DeleteToDoListItemWindow.DeleteButton = Button(master=self.MainWindow.DeleteToDoListItemWindow.DeleteFrame,
-                                                                 text="Delete", command=lambda:self.deleteToDoListItem(self.MainWindow.DeleteToDoListItemWindow.DeleteEntry.get()))
+                                                                 text="Delete", command=lambda:self.deleteToDoListItem(self.MainWindow.DeleteToDoListItemWindow.DeleteEntry.get()),
+                                                                 bd=0, bg="#dba4c8", activebackground="#dba4c8")
         self.MainWindow.DeleteToDoListItemWindow.DeleteButton.pack()
 
 
+        self.MainWindow.DeleteToDoListItemWindow.DeleteFrame.configure(bg="#e3bcd5")
         self.MainWindow.DeleteToDoListItemWindow.DeleteFrame.pack()
     
     def deleteToDoListItem(self, pItemNumberToDelete):
