@@ -21,7 +21,7 @@ class MinatoAquaMaidApp:
         print("Starting Minato Aqua Maid...")
 
         # main window
-        self.MainWindow.BackgroundImage = PhotoImage(file="img/minato-aqua-excited256.png") # main window background label image
+        self.MainWindow.BackgroundImage = PhotoImage(file="img/minato-aqua-excited-blue256.png") # main window background label image
         self.MainWindow.BackgroundLabel = Label(master=self.MainWindow, image=self.MainWindow.BackgroundImage) # main window background label
         self.MainWindow.BackgroundLabel.bind("<Return>", lambda event: self.MainWindow.BackgroundLabel.config(cursor="hand2"))
         self.MainWindow.BackgroundLabel.bind("<Button-1>", lambda event: self.prepareToPlaySound())
@@ -49,7 +49,7 @@ class MinatoAquaMaidApp:
         self.MainWindow.AppControlFrame = Frame(master=self.MainWindow)
 
         # exit button
-        self.MainWindow.ExitButtonImage = PhotoImage(file="img/minato-aqua-greeting64.png") # exit button image
+        self.MainWindow.ExitButtonImage = PhotoImage(file="img/minato-aqua-greeting-blue64.png") # exit button image
         self.MainWindow.ExitButton = Button(master=self.MainWindow.AppControlFrame, image=self.MainWindow.ExitButtonImage, command=self.exitApp,
                                              bd=0, cursor="hand2") # exit button
         

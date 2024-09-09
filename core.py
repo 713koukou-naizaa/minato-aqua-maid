@@ -12,7 +12,7 @@ def main():
 
     App.runApp()
 
-    
+
 
 main()
 
