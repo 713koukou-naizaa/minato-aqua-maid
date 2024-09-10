@@ -23,7 +23,7 @@ class MinatoAquaMaidApp:
         # main window
         self.MainWindow.BackgroundImage = PhotoImage(file="img/minato-aqua-excited-blue256.png") # main window background label image
         self.MainWindow.BackgroundLabel = Label(master=self.MainWindow, image=self.MainWindow.BackgroundImage) # main window background label
-        self.MainWindow.BackgroundLabel.bind("<Return>", lambda event: self.MainWindow.BackgroundLabel.config(cursor="hand2"))
+        self.MainWindow.BackgroundLabel.config(cursor="hand2")
         self.MainWindow.BackgroundLabel.bind("<Button-1>", lambda event: self.prepareToPlaySound())
 
         self.MainWindow.BackgroundLabel.pack()
@@ -129,7 +129,7 @@ class MinatoAquaMaidApp:
         print("Playing random sound...")
 
         randomNumber = random.randint(0, 4) # choose random number from 0 to 4
-        print(f"Playing sound: {self.soundsNameList[randomNumber]} ({randomNumber})")
+        print(f"Playing sound: {self.soundsNameList[randomNumber]} ({randomNumber}).")
         # play random sound
         pygame.mixer.music.load(f'sounds/{self.soundsNameList[randomNumber]}')
         pygame.mixer.music.play()
@@ -179,14 +179,22 @@ class MinatoAquaMaidApp:
 
     def showToDoList(self):
         print("Showing to-do list...")
+        # verifications
+        if(len(self.toDoListItemsList) == 0):
+            print("To-do list is empty.")
+
         for index in range(len(self.toDoListItemsList)):
             print(f"[{index}] | {self.toDoListItemsList[index]}")
 
     def addToDoListItem(self, pItemToAdd):
-        print("Validating to-do list item...")
-        self.toDoListItemsList.append(pItemToAdd)
-        print(f"Added to-do list item: {pItemToAdd}")
-        self.MainWindow.AddToDoListItemWindow.destroy()
+        print("Checking to-do list item...")
+        # verifications
+        if(pItemToAdd in self.toDoListItemsList):
+            print(f"{pItemToAdd} already exists in to-do list.")
+        else:
+            self.toDoListItemsList.append(pItemToAdd)
+            print(f"Added to-do list item: {pItemToAdd}.")
+            self.MainWindow.AddToDoListItemWindow.destroy()
 
 
     def initDeleteToDoListItemWindow(self):
@@ -233,10 +241,17 @@ class MinatoAquaMaidApp:
     def deleteToDoListItem(self, pItemNumberToDelete):
         # convert string parameter to int
         pItemNumberToDelete=int(pItemNumberToDelete)
-        print(f"Deleting item number : {pItemNumberToDelete}")
-        deletedItem=self.toDoListItemsList.pop(pItemNumberToDelete)
-        print(f"Successfully deleted : '{deletedItem}")
-        self.MainWindow.DeleteToDoListItemWindow.destroy()
+        print(f"Checking item number : {pItemNumberToDelete}.")
+        # verifications
+        if(len(self.toDoListItemsList) == 0):
+            print(f"To-do list is empty, couldn't remove item {pItemNumberToDelete}.")
+        elif(pItemNumberToDelete < 0 or pItemNumberToDelete > len(self.toDoListItemsList)):
+            print(f"Invalid item number : {pItemNumberToDelete}.")
+        else:
+            deletedItem=self.toDoListItemsList.pop(pItemNumberToDelete)
+            print(f"Successfully deleted : '{deletedItem}.")
+            self.MainWindow.DeleteToDoListItemWindow.destroy()
+
 
     
 
