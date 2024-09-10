@@ -66,7 +66,7 @@ class MinatoAquaMaidApp:
 
         # show to do list button
         self.MainWindow.ToDoListButtonImage = PhotoImage(file="img/minato-aqua-crying64.png") # to do list window button image
-        self.MainWindow.ToDoListButton = Button(master=self.MainWindow.MainMenuFrame, image=self.MainWindow.ToDoListButtonImage, command=self.showToDoList,
+        self.MainWindow.ToDoListButton = Button(master=self.MainWindow.MainMenuFrame, image=self.MainWindow.ToDoListButtonImage, command=self.initToDoListWindow,
                                                   bd=0, cursor="hand2") # to do list button
         
         # show to do list button settings
@@ -136,11 +136,44 @@ class MinatoAquaMaidApp:
         pygame.mixer.music.set_volume(0.15)
 
 
+    def initToDoListWindow(self):
+        # to do list window
+        self.MainWindow.ToDoListWindow = Toplevel(self.MainWindow)
+
+        # to do list window settings
+        self.MainWindow.ToDoListWindow.title("To-do list")
+        self.MainWindow.ToDoListWindow.configure(bg="#e3bcd5")
+
+        self.MainWindow.ToDoListWindow.width=175
+        self.MainWindow.ToDoListWindow.height=350
+
+        self.MainWindow.ToDoListWindow.posX=(self.MainWindow.posX) - (self.MainWindow.ToDoListWindow.width)
+        self.MainWindow.ToDoListWindow.posY=(self.MainWindow.posY) - (self.MainWindow.ToDoListWindow.height)
+
+        self.MainWindow.ToDoListWindow.geometry(f"{self.MainWindow.ToDoListWindow.width}x{self.MainWindow.ToDoListWindow.height}+{self.MainWindow.ToDoListWindow.posX}+{self.MainWindow.ToDoListWindow.posY}")
+
+        # list frame
+        self.MainWindow.ToDoListWindow.ListFrame = Frame(master=self.MainWindow.ToDoListWindow)
+
+        # list title label
+        self.MainWindow.ToDoListWindow.ListTitleLabel = Label(master=self.MainWindow.ToDoListWindow.ListFrame, text="To-do list",
+                                                             bd=0, font=("Arial", 20), bg="#e3bcd5")
+        self.MainWindow.ToDoListWindow.ListTitleLabel.pack()
+
+    def showToDoList(self):
+        print("Showing to-do list...")
+        # verifications
+        if(len(self.toDoListItemsList) == 0):
+            print("To-do list is empty.")
+
+        for index in range(len(self.toDoListItemsList)):
+            print(f"[{index}] | {self.toDoListItemsList[index]}")
+
     def initAddToDoListItemWindow(self):
-        # to do list item query window
+        # to do list item add window
         self.MainWindow.AddToDoListItemWindow = Toplevel(self.MainWindow)
 
-        # to do list item query window settings
+        # to do list item add window settings
         self.MainWindow.AddToDoListItemWindow.title("Add new to-do list item")
         self.MainWindow.AddToDoListItemWindow.resizable(False, False)
         self.MainWindow.AddToDoListItemWindow.configure(bg="#e3bcd5")
@@ -156,10 +189,10 @@ class MinatoAquaMaidApp:
         # add frame
         self.MainWindow.AddToDoListItemWindow.AddFrame = Frame(master=self.MainWindow.AddToDoListItemWindow)
         
-        # title label
-        self.MainWindow.AddToDoListItemWindow.TitleLabel = Label(master=self.MainWindow.AddToDoListItemWindow.AddFrame, text="Add new to-do list item",
-                                                                 bd=0, bg="#e3bcd5")
-        self.MainWindow.AddToDoListItemWindow.TitleLabel.pack()
+        # add title label
+        self.MainWindow.AddToDoListItemWindow.AddTitleLabel = Label(master=self.MainWindow.AddToDoListItemWindow.AddFrame, text="Add new to-do list item",
+                                                                 bd=0, font=("Arial", 20), bg="#e3bcd5")
+        self.MainWindow.AddToDoListItemWindow.AddTitleLabel.pack()
 
         # item entry
         self.MainWindow.AddToDoListItemWindow.AddEntry = Entry(master=self.MainWindow.AddToDoListItemWindow.AddFrame,
@@ -177,15 +210,6 @@ class MinatoAquaMaidApp:
         self.MainWindow.AddToDoListItemWindow.AddFrame.configure(bg="#e3bcd5")
         self.MainWindow.AddToDoListItemWindow.AddFrame.pack()
 
-    def showToDoList(self):
-        print("Showing to-do list...")
-        # verifications
-        if(len(self.toDoListItemsList) == 0):
-            print("To-do list is empty.")
-
-        for index in range(len(self.toDoListItemsList)):
-            print(f"[{index}] | {self.toDoListItemsList[index]}")
-
     def addToDoListItem(self, pItemToAdd):
         print("Checking to-do list item...")
         # verifications
@@ -196,12 +220,11 @@ class MinatoAquaMaidApp:
             print(f"Added to-do list item: {pItemToAdd}.")
             self.MainWindow.AddToDoListItemWindow.destroy()
 
-
     def initDeleteToDoListItemWindow(self):
-        # to do list item query window
+        # to do list item delete window
         self.MainWindow.DeleteToDoListItemWindow = Toplevel(self.MainWindow)
 
-        # to do list item query window settings
+        # to do list item delete window settings
         self.MainWindow.DeleteToDoListItemWindow.title("Delete to-do list item")
         self.MainWindow.DeleteToDoListItemWindow.resizable(False, False)
         self.MainWindow.DeleteToDoListItemWindow.configure(bg="#e3bcd5")
@@ -217,10 +240,10 @@ class MinatoAquaMaidApp:
         # delete frame
         self.MainWindow.DeleteToDoListItemWindow.DeleteFrame = Frame(master=self.MainWindow.DeleteToDoListItemWindow)
         
-        # title label
-        self.MainWindow.DeleteToDoListItemWindow.TitleLabel = Label(master=self.MainWindow.DeleteToDoListItemWindow.DeleteFrame, text="Delete to-do list item",
-                                                                 bd=0, bg="#e3bcd5")
-        self.MainWindow.DeleteToDoListItemWindow.TitleLabel.pack()
+        # delete title label
+        self.MainWindow.DeleteToDoListItemWindow.DeleteTitleLabel = Label(master=self.MainWindow.DeleteToDoListItemWindow.DeleteFrame, text="Delete to-do list item",
+                                                                 bd=0, font=("Arial", 20), bg="#e3bcd5")
+        self.MainWindow.DeleteToDoListItemWindow.DeleteTitleLabel.pack()
 
         # item number entry
         self.MainWindow.DeleteToDoListItemWindow.DeleteEntry = Entry(master=self.MainWindow.DeleteToDoListItemWindow.DeleteFrame,
