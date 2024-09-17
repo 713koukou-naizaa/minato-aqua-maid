@@ -1,13 +1,11 @@
 
+from tkinter import *
 
-from classes import *
-
-
+from modules.mainWindow import MainWindow
 
 
 def main():
-    MainWindow = Tk()
-    App = MinatoAquaMaidApp(MainWindow)
+    App = MainWindow()
 
 
     App.runApp()
