@@ -30,7 +30,27 @@ class ToDoListWindow(Toplevel):
         # list title label
         self.ListTitleLabel = Label(master=self.ListFrame, text="To-do list",
                                                              bd=0, font=("Arial", 20), bg="#e3bcd5")
+
         self.ListTitleLabel.pack()
+
+        # to do list list box
+        self.ToDoListListBox = Listbox(master=self.ListFrame, listvariable=self.toDoList,
+                               bd=0, activestyle="dotbox", font=("Arial", 15), bg="#f7d5eb")
+        self.initToDoListListBox()
+
+        self.ToDoListListBox.pack()
+
+        # list box scrollbar
+        self.ListBoxScrollBarX=Scrollbar(master=self.ListFrame, orient="horizontal", command=self.ToDoListListBox.xview)
+
+        # list box scrollbar settings
+        self.ListBoxScrollBarX.pack(side="bottom", fill="x")
+
+        # list box settings
+        self.ToDoListListBox.config(xscrollcommand=self.ListBoxScrollBarX.set)
+
+        # list frame settings
+        self.ListFrame.pack()
 
 
         # main menu frame
@@ -85,23 +105,41 @@ class ToDoListWindow(Toplevel):
         self.MainMenuFrame.posY=0
         self.MainMenuFrame.place(x=self.MainMenuFrame.posX, y=self.MainMenuFrame.posY)
 
+    def destroy(self):
+        self.updateToDoListFile()
+        Tk.destroy(self)
+
 
     def initToDoList(self):
         print("Initializing to-do list...")
         toDoListFile=open("to-do-list.txt", "r")
         toDoListFileLinesList=toDoListFile.readlines()
-        toDoList=toDoListFileLinesList
         print("To-do list initialized.")
         toDoListFile.close()
 
-        return toDoList
+        return toDoListFileLinesList
+    
+    def initToDoListListBox(self):
+        print("Initializing to-do list listbox...")
+        for index in range(len(self.toDoList)):
+            item=f"[{index}] | {self.toDoList[index]}"
+            self.ToDoListListBox.insert(END, item)
+        print("To-do list listbox initialized.")
 
-    def saveToDoList(self):
+    def updateToDoListFile(self):
         print("Saving to-do list...")
         toDoListFile=open("to-do-list.txt", "w")
-        toDoListFile.writelines(self.toDoList)
-        print("To-do list saved.")
+        for index in range(len(self.toDoList)):
+            toDoListFile.write(f"{self.toDoList[index]}")
         toDoListFile.close()
+
+        with open("to-do-list.txt", "r") as toDoListFile:
+            toDoListFileLines = toDoListFile.readlines()
+        
+        if not(toDoListFileLines[-1].endswith("\n")):
+            with open("to-do-list.txt", "a") as toDoListFile:
+                toDoListFile.write("\n")
+        print("To-do list saved.")
 
     def showConsoleToDoList(self):
         print("Showing to-do list..")
@@ -110,7 +148,7 @@ class ToDoListWindow(Toplevel):
             print("To-do list is empty.")
 
         for index in range(len(self.toDoList)):
-            print(f"[{index}] | {self.toDoList[index]}")
+            print(f"[{index}] {self.toDoList[index]}")
 
     def openAddToDoListItemWindow(self):
         print("Opening add to do list item window...")
@@ -129,7 +167,11 @@ class ToDoListWindow(Toplevel):
         else:
             self.toDoList.append(pItemToAdd)
             print(f"Added to-do list item: {pItemToAdd}.")
-        self.saveToDoList()
+            self.addToDoListListBoxItem(pItemToAdd)
+    
+    def addToDoListListBoxItem(self, pItemToAdd):
+        pItemToAdd=f"[{len(self.toDoList)-1}] {pItemToAdd}"
+        self.ToDoListListBox.insert(END, pItemToAdd)
 
     def deleteToDoListItem(self, pItemNumberToDelete):
         # convert string parameter to int
@@ -143,6 +185,8 @@ class ToDoListWindow(Toplevel):
         else:
             deletedItem=self.toDoList.pop(pItemNumberToDelete)
             print(f"Successfully deleted : '{deletedItem}.")
-        self.saveToDoList()
 
+        self.deleteToDoListListBoxItem(pItemNumberToDelete)
 
+    def deleteToDoListListBoxItem(self, pItemNumberToDelete):
+        self.ToDoListListBox.delete(pItemNumberToDelete)
